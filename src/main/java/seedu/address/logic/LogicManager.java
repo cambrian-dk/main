@@ -36,13 +36,18 @@ public class LogicManager implements Logic {
 
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
+        //logging, safe to ignore
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
         CommandResult commandResult;
+        //parse user input from String to a command
         Command command = addressBookParser.parseCommand(commandText);
+        //executes command and stores the result
         commandResult = command.execute(model);
 
         try {
+            //the previous line of code modifies model
+            //since it's being stored here
             storage.saveAddressBook(model.getAddressBook());
         } catch (IOException ioe) {
             throw new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe);
